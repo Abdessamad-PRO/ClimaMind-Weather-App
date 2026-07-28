@@ -1,0 +1,22 @@
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+
+# Backend (Spring Boot)
+backend/target/
+backend/.idea/
+backend/*.iml
+
+# VS Code
+.vscode/
+
+# IntelliJ
+.idea/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
