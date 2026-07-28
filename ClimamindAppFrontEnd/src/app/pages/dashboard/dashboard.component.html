@@ -1,0 +1,58 @@
+<div class="app-shell">
+  <app-background-anim [condition]="weather?.condition || 'clear'" />
+
+  <div class="app-layout">
+    <app-sidebar
+      [weather]="weather"
+      [recentSearches]="recentSearches"
+      [pins]="mapPins"
+      [mapLoading]="mapLoading"
+      (onMapClick)="loadByCoords($event.lat, $event.lon)"
+      (onRecentSelect)="loadByRecent($event)"
+    />
+
+    <div class="main-panel">
+      <app-header-actions
+        [city]="weather?.city || ''"
+        [country]="weather?.country || ''"
+        (onSearch)="loadBySearch($event)"
+        (onRefresh)="refresh()"
+      />
+
+      <div class="content-area">
+        <!-- Loading state -->
+        <div class="loading-state" *ngIf="loading && !weather">
+          <div class="loader-ring"></div>
+          <p>Detecting your location...</p>
+        </div>
+
+        <!-- Error state -->
+        <div class="error-state" *ngIf="error && !weather">
+          <span class="error-icon">⚠️</span>
+          <p>{{ error }}</p>
+          <button (click)="loadDefault()">Use default location</button>
+        </div>
+
+        <!-- Weather content -->
+        <div class="weather-content" *ngIf="weather">
+          <div class="top-content">
+            <div class="left-col">
+              <app-current-weather [weather]="weather" />
+            </div>
+            <div class="right-col">
+              <app-world-map
+                [pins]="mapPins"
+                [currentLat]="weather.lat || 0"
+                [currentLon]="weather.lon || 0"
+                [loading]="mapLoading"
+                (onLocationSelect)="onMapClick($event)"
+              />
+            </div>
+          </div>
+
+          <app-forecast-wave [weather]="weather" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,235 @@
+.bg-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* ── SKY GRADIENTS ── */
+.sky-layer {
+  position: absolute;
+  inset: 0;
+  transition: background 3s ease;
+}
+.sky-layer.clear {
+  background: linear-gradient(180deg,
+    #0a1628 0%, #1a3a6e 30%, #2d6fb0 60%, #f4a460 85%, #e8855a 100%);
+}
+.sky-layer.partly-cloudy {
+  background: linear-gradient(180deg,
+    #0d1f3c 0%, #1a3a6e 40%, #2a5a9e 70%, #4a7ab5 100%);
+}
+.sky-layer.cloudy {
+  background: linear-gradient(180deg,
+    #0a0f1e 0%, #1a2035 40%, #2a3050 70%, #353d5a 100%);
+}
+.sky-layer.rain, .sky-layer.drizzle {
+  background: linear-gradient(180deg,
+    #06090f 0%, #0d1525 30%, #1a2540 60%, #1e2d4a 100%);
+}
+.sky-layer.thunderstorm, .sky-layer.stormy {
+  background: linear-gradient(180deg,
+    #04060c 0%, #080d18 30%, #0f1525 60%, #1a1f30 100%);
+}
+.sky-layer.snow {
+  background: linear-gradient(180deg,
+    #0d1a2e 0%, #1a2d4a 40%, #2a3d5e 70%, #3a506e 100%);
+}
+.sky-layer.mist {
+  background: linear-gradient(180deg,
+    #0d1520 0%, #1a2535 40%, #2a3545 70%, #3a4555 100%);
+}
+
+/* ── CANVAS ── */
+.particle-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* ── SUN ── */
+.sun-wrapper {
+  position: absolute;
+  top: 8%;
+  right: 15%;
+}
+.sun {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sun-core {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff9e6 0%, #ffe680 40%, #ffb830 100%);
+  box-shadow:
+    0 0 30px 15px rgba(255,220,80,0.6),
+    0 0 80px 40px rgba(255,180,40,0.3),
+    0 0 160px 80px rgba(255,140,20,0.15);
+  animation: sun-pulse 4s ease-in-out infinite;
+  z-index: 2;
+}
+.sun-glow {
+  position: absolute;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,220,80,0.25) 0%, transparent 70%);
+  animation: sun-pulse 4s ease-in-out infinite reverse;
+}
+.sun-ray {
+  position: absolute;
+  width: 3px;
+  height: 55px;
+  background: linear-gradient(to bottom, rgba(255,230,100,0.9), transparent);
+  top: -20px;
+  left: calc(50% - 1.5px);
+  transform-origin: 50% 75px;
+  border-radius: 3px;
+  animation: ray-spin 12s linear infinite;
+}
+@keyframes sun-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.08); opacity: 0.9; }
+}
+@keyframes ray-spin {
+  from { transform: rotate(var(--start, 0deg)); }
+  to   { transform: rotate(calc(var(--start, 0deg) + 360deg)); }
+}
+
+/* ── CLOUDS ── */
+.cloud-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.cloud {
+  position: absolute;
+  background: rgba(255,255,255,0.88);
+  border-radius: 50px;
+  filter: blur(0px);
+}
+.cloud::before, .cloud::after {
+  content: '';
+  position: absolute;
+  background: inherit;
+  border-radius: 50%;
+}
+.cloud.dark {
+  background: rgba(80,90,110,0.85);
+}
+.cloud.dark::before, .cloud.dark::after {
+  background: rgba(70,80,100,0.85);
+}
+
+/* Cloud 1 — large, slow */
+.cloud.c1 {
+  width: 280px; height: 80px;
+  top: 8%; left: -300px;
+  animation: cloud-drift 35s linear infinite;
+}
+.cloud.c1::before {
+  width: 130px; height: 130px;
+  top: -70px; left: 40px;
+}
+.cloud.c1::after {
+  width: 100px; height: 100px;
+  top: -55px; left: 130px;
+}
+
+/* Cloud 2 */
+.cloud.c2 {
+  width: 200px; height: 60px;
+  top: 18%; left: -250px;
+  animation: cloud-drift 28s linear infinite 8s;
+  opacity: 0.75;
+}
+.cloud.c2::before {
+  width: 90px; height: 90px;
+  top: -50px; left: 30px;
+}
+.cloud.c2::after {
+  width: 70px; height: 70px;
+  top: -40px; left: 100px;
+}
+
+/* Cloud 3 — small fast */
+.cloud.c3 {
+  width: 150px; height: 45px;
+  top: 28%; left: -200px;
+  animation: cloud-drift 20s linear infinite 4s;
+  opacity: 0.6;
+}
+.cloud.c3::before {
+  width: 70px; height: 70px;
+  top: -40px; left: 20px;
+}
+.cloud.c3::after {
+  width: 55px; height: 55px;
+  top: -30px; left: 75px;
+}
+
+/* Cloud 4 */
+.cloud.c4 {
+  width: 240px; height: 70px;
+  top: 12%; left: -280px;
+  animation: cloud-drift 40s linear infinite 15s;
+  opacity: 0.8;
+}
+.cloud.c4::before {
+  width: 110px; height: 110px;
+  top: -60px; left: 50px;
+}
+.cloud.c4::after {
+  width: 85px; height: 85px;
+  top: -48px; left: 140px;
+}
+
+/* Cloud 5 — very large */
+.cloud.c5 {
+  width: 320px; height: 90px;
+  top: 5%; left: -360px;
+  animation: cloud-drift 50s linear infinite 22s;
+  opacity: 0.5;
+}
+.cloud.c5::before {
+  width: 150px; height: 150px;
+  top: -80px; left: 60px;
+}
+.cloud.c5::after {
+  width: 120px; height: 120px;
+  top: -65px; left: 160px;
+}
+
+@keyframes cloud-drift {
+  from { transform: translateX(0); }
+  to   { transform: translateX(calc(100vw + 400px)); }
+}
+
+/* ── LIGHTNING ── */
+.lightning-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(200,220,255,0);
+  pointer-events: none;
+  transition: background 0.05s;
+}
+.lightning-overlay.flash {
+  background: rgba(200,220,255,0.18);
+}
+
+/* ── VIGNETTE ── */
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center,
+    transparent 40%, rgba(0,0,0,0.55) 100%);
+  pointer-events: none;
+}

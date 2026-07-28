@@ -1,0 +1,44 @@
+.aq-card {
+  padding: 16px;
+  border-radius: 16px;
+}
+.glass-card {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.card-title { font-size: 12px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.5px; }
+.aq-label {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+.aq-label.good { background: rgba(52,211,153,0.2); color: #34d399; }
+.aq-label.fair { background: rgba(251,191,36,0.2); color: #fbbf24; }
+.aq-label.moderate { background: rgba(251,146,60,0.2); color: #fb923c; }
+.aq-label.poor, .aq-label.very-poor { background: rgba(239,68,68,0.2); color: #ef4444; }
+.aqi-bar-container { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.aqi-bar {
+  flex: 1;
+  height: 4px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.aqi-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+.aqi-fill.good { background: #34d399; }
+.aqi-fill.fair { background: #fbbf24; }
+.aqi-fill.moderate { background: #fb923c; }
+.aqi-fill.poor, .aqi-fill.very-poor { background: #ef4444; }
+.aqi-val { font-size: 11px; color: rgba(255,255,255,0.4); white-space: nowrap; }
+.pollutants { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.pollutant { display: flex; flex-direction: column; gap: 2px; }
+.p-name { font-size: 10px; color: rgba(255,255,255,0.4); text-transform: uppercase; }
+.p-val { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.8); }
+.p-unit { font-size: 9px; color: rgba(255,255,255,0.3); }

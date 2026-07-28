@@ -1,0 +1,37 @@
+<div class="map-card glass-card">
+  <div class="map-header">
+    <div class="title-container">
+      <span class="map-title">World Map</span>
+      <span class="map-hint">Click anywhere to get weather</span>
+    </div>
+
+    <!-- Sélecteur de modes de carte -->
+    <div class="map-style-selector">
+      <button 
+        [class.active]="currentStyle === 'simple'" 
+        (click)="changeMapStyle('simple')">
+        Simple
+      </button>
+      <button 
+        [class.active]="currentStyle === 'relief'" 
+        (click)="changeMapStyle('relief')">
+        Relief
+      </button>
+      <button 
+        [class.active]="currentStyle === 'satellite'" 
+        (click)="changeMapStyle('satellite')">
+        Satellite
+      </button>
+    </div>
+  </div>
+
+  <div class="map-container">
+    <!-- Vraie carte interactive avec Zoom et détails des villes -->
+    <div #mapElement class="leaflet-map-element"></div>
+
+    <!-- Spinner de chargement -->
+    <div class="loading-overlay" *ngIf="loading">
+      <div class="spinner"></div>
+    </div>
+  </div>
+</div>

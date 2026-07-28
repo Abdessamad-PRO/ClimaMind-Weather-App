@@ -1,0 +1,26 @@
+<div class="bg-wrapper">
+  <!-- Sky gradient layer -->
+  <div class="sky-layer" [ngClass]="condition"></div>
+  <!-- Canvas for particles (rain, snow, sun rays) -->
+  <canvas #canvas class="particle-canvas"></canvas>
+  <!-- Cloud layer (HTML divs = smoother clouds) -->
+  <div class="cloud-layer" *ngIf="showClouds">
+    <div class="cloud c1" [class.dark]="darkClouds"></div>
+    <div class="cloud c2" [class.dark]="darkClouds"></div>
+    <div class="cloud c3" [class.dark]="darkClouds"></div>
+    <div class="cloud c4" [class.dark]="darkClouds"></div>
+    <div class="cloud c5" [class.dark]="darkClouds"></div>
+  </div>
+  <!-- Sun element -->
+  <div class="sun-wrapper" *ngIf="showSun">
+    <div class="sun">
+      <div class="sun-core"></div>
+      <div class="sun-glow"></div>
+      <div class="sun-ray" *ngFor="let r of rays" [style.transform]="'rotate(' + r + 'deg)'"></div>
+    </div>
+  </div>
+  <!-- Lightning flash overlay -->
+  <div class="lightning-overlay" [class.flash]="lightningFlash"></div>
+  <!-- Dark vignette -->
+  <div class="vignette"></div>
+</div>

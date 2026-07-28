@@ -1,0 +1,17 @@
+<div class="forecast-section" *ngIf="weather">
+  <canvas #waveCanvas class="wave-canvas"></canvas>
+  <div class="forecast-days">
+    <div
+      class="day-col"
+      *ngFor="let day of weather.forecast; let i = index"
+      [class.today]="i === 0"
+    >
+      <span class="day-name">{{ i === 0 ? 'Today' : day.dayName }}</span>
+      <div class="day-icon">{{ getIcon(day) }}</div>
+      <div class="day-temps">
+        <span class="temp-max">{{ day.tempMax }}°</span>
+        <span class="temp-min">{{ day.tempMin }}°</span>
+      </div>
+    </div>
+  </div>
+</div>

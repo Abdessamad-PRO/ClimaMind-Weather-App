@@ -1,0 +1,19 @@
+<div class="aq-card glass-card" *ngIf="aq">
+  <div class="card-header">
+    <span class="card-title">Air Quality</span>
+    <span class="aq-label" [ngClass]="getClass()">{{ aq.label }}</span>
+  </div>
+  <div class="aqi-bar-container">
+    <div class="aqi-bar">
+      <div class="aqi-fill" [style.width.%]="(aq.aqi / 5) * 100" [ngClass]="getClass()"></div>
+    </div>
+    <span class="aqi-val">AQI {{ aq.aqi }}/5</span>
+  </div>
+  <div class="pollutants">
+    <div class="pollutant" *ngFor="let p of getPollutants()">
+      <span class="p-name">{{ p.name }}</span>
+      <span class="p-val">{{ p.value | number:'1.0-1' }}</span>
+      <span class="p-unit">μg/m³</span>
+    </div>
+  </div>
+</div>
