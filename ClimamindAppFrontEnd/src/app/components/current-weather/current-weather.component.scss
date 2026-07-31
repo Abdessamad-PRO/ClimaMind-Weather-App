@@ -1,93 +1,122 @@
-.current-weather {
-  padding: 24px 32px 20px;
+.hero-panel {
+  height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  padding: 28px 32px 20px;
   gap: 16px;
+  width: 100%;
+  overflow: hidden;
 }
 
+/* ── TOP ── */
+.hero-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.condition-icon { font-size: 64px; line-height: 1; flex-shrink: 0; }
 .temp-block {
   display: flex;
   align-items: flex-start;
-}
-
-.temp-main {
-  display: flex;
-  align-items: flex-start;
   gap: 4px;
+  flex-shrink: 0;
 }
-
 .temp-value {
-  font-size: 96px;
+  font-size: 80px;
   font-weight: 200;
   line-height: 1;
   color: #fff;
-  letter-spacing: -4px;
+  letter-spacing: -5px;
 }
-
-.temp-meta {
+.temp-right {
   display: flex;
   flex-direction: column;
-  padding-top: 16px;
+  padding-top: 14px;
   gap: 4px;
 }
-
-.temp-unit {
-  font-size: 28px;
-  font-weight: 300;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.feels-like {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.45);
-  white-space: nowrap;
-}
-
-// .condition-block {
-// }
-
-.condition-text {
-  font-size: 32px;
-  font-weight: 300;
-  color: #fff;
-  line-height: 1.2;
-  margin: 0 0 4px;
-}
-
-.condition-desc {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.5);
-  margin: 0;
-}
-
-.weather-stats {
-  display: flex;
-  gap: 24px;
-  padding-top: 8px;
-  border-top: 1px solid rgba(255, 255, 255, 0.07);
-}
-
-.stat {
+.temp-unit { font-size: 26px; font-weight: 300; color: rgba(255,255,255,0.8); }
+.feels { font-size: 12px; color: rgba(255,255,255,0.45); white-space: nowrap; }
+.condition-info {
+  padding-top: 10px;
   display: flex;
   flex-direction: column;
   gap: 4px;
-  align-items: flex-start;
-
-  svg {
-    color: rgba(255, 255, 255, 0.4);
-    margin-bottom: 2px;
-  }
+  flex: 1;
+  min-width: 120px;
+  word-break: break-word; /* Casse les mots trop longs si nécessaire */
 }
+.condition-label { font-size: 28px; font-weight: 300; color: #fff; margin: 0; }
+.condition-desc { font-size: 13px; color: rgba(255,255,255,0.5); margin: 0; }
+.min-max { display: flex; gap: 6px; margin: 4px 0 0; font-size: 14px; }
+.max { color: #fbbf24; font-weight: 500; }
+.sep { color: rgba(255,255,255,0.3); }
+.min { color: #93c5fd; font-weight: 500; }
 
-.stat-label {
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.4);
+/* ── QUICK STATS ── */
+.quick-stats {
+  display: flex;
+  gap: 0;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.qs-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 8px;
+  border-right: 1px solid rgba(255,255,255,0.06);
+}
+.qs-item:last-child { border-right: none; }
+.qs-icon { font-size: 16px; }
+.qs-label { font-size: 10px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.4px; }
+.qs-val { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.9); }
+
+/* ── HOURLY ── */
+.hourly-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.hourly-title {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
 }
-
-.stat-val {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.85);
-  font-weight: 500;
+.hourly-scroll {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  padding-bottom: 4px;
 }
+.hourly-scroll::-webkit-scrollbar { height: 2px; }
+.hourly-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
+.hourly-item {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.07);
+  transition: background 0.2s;
+  cursor: default;
+  min-width: 60px;
+}
+.hourly-item.now {
+  background: rgba(147,197,253,0.12);
+  border-color: rgba(147,197,253,0.25);
+}
+.hourly-item:hover { background: rgba(255,255,255,0.09); }
+.h-hour { font-size: 11px; color: rgba(255,255,255,0.5); font-weight: 500; }
+.now .h-hour { color: #93c5fd; }
+.h-icon { font-size: 20px; }
+.h-temp { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.9); }

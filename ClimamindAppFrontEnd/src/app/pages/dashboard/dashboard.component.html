@@ -1,58 +1,77 @@
 <div class="app-shell">
-  <app-background-anim [condition]="weather?.condition || 'clear'" />
+     <app-background-anim [condition]="weather?.condition || 'clear'" [isDay]="weather?.isDay ?? true" />
 
-  <div class="app-layout">
-    <app-sidebar
-      [weather]="weather"
-      [recentSearches]="recentSearches"
-      [pins]="mapPins"
-      [mapLoading]="mapLoading"
-      (onMapClick)="loadByCoords($event.lat, $event.lon)"
-      (onRecentSelect)="loadByRecent($event)"
-    />
+      <div class="app-layout">
+        <!-- Zone Principale avec Scroll fluide -->
+        <div class="main-panel">
+          <app-header-actions
+            [city]="weather?.city || ''"
+            [country]="weather?.country || ''"
+            [timezoneOffset]="weather?.timezone || 0"
+            [unit]="selectedUnit"
+            (onSearch)="loadBySearch($event)"
+            (onRefresh)="refresh()"
+            (onUnitChange)="changeUnit($event)"
+          />
 
-    <div class="main-panel">
-      <app-header-actions
-        [city]="weather?.city || ''"
-        [country]="weather?.country || ''"
-        (onSearch)="loadBySearch($event)"
-        (onRefresh)="refresh()"
-      />
-
-      <div class="content-area">
-        <!-- Loading state -->
-        <div class="loading-state" *ngIf="loading && !weather">
-          <div class="loader-ring"></div>
-          <p>Detecting your location...</p>
-        </div>
-
-        <!-- Error state -->
-        <div class="error-state" *ngIf="error && !weather">
-          <span class="error-icon">⚠️</span>
-          <p>{{ error }}</p>
-          <button (click)="loadDefault()">Use default location</button>
-        </div>
-
-        <!-- Weather content -->
-        <div class="weather-content" *ngIf="weather">
-          <div class="top-content">
-            <div class="left-col">
-              <app-current-weather [weather]="weather" />
+          <div class="scrollable-content">
+            <!-- État de chargement -->
+            <div class="loading-state" *ngIf="loading && !weather">
+              <div class="loader-ring"></div>
+              <p>Détection de votre position...</p>
             </div>
-            <div class="right-col">
-              <app-world-map
-                [pins]="mapPins"
-                [currentLat]="weather.lat || 0"
-                [currentLon]="weather.lon || 0"
-                [loading]="mapLoading"
-                (onLocationSelect)="onMapClick($event)"
-              />
+
+            <!-- État d'erreur -->
+            <div class="error-state" *ngIf="error && !weather">
+              <span class="error-icon">⚠️</span>
+              <p>{{ error }}</p>
+              <button (click)="loadDefault()">Utiliser la position par défaut</button>
+            </div>
+
+            <!-- Contenu Météo principal -->
+            <div class="weather-content" *ngIf="weather">
+              
+              <!-- SECTION HAUTE : Météo courante & Grande Carte -->
+              <section class="top-section">
+                <div class="current-weather-box">
+                  <app-current-weather
+                   [weather]="weather" 
+                   [unit]="selectedUnit"
+                />
+                </div>
+                <div class="map-box">
+                  <app-world-map
+                    [pins]="mapPins"
+                    [currentLat]="weather.lat"
+                    [currentLon]="weather.lon"
+                    [loading]="mapLoading"
+                    (onLocationSelect)="onMapClick($event)"
+                  />
+                </div>
+              </section>
+
+              <!-- SECTION BASSE : Prévisions Vagues/Heures & Indicateurs Clés -->
+              <section class="bottom-section">
+
+               <div class="section-block">
+                  <app-indicator-cards [weather]="weather"
+                    [recentSearches]="recentSearches"
+                    (onSelect)="loadByRecent($event)"
+                    [unit]="selectedUnit"
+                    [isDay]="weather.isDay "
+                   />
+                </div>
+
+               <div class="section-block">
+                  <app-forecast-wave 
+                  [weather]="weather" 
+                  [unit]="selectedUnit"
+                  />
+                </div>
+              </section>
+
             </div>
           </div>
-
-          <app-forecast-wave [weather]="weather" />
         </div>
       </div>
     </div>
-  </div>
-</div>

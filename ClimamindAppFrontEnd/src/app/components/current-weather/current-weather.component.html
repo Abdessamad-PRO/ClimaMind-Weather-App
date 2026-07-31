@@ -1,47 +1,66 @@
-<div class="current-weather" *ngIf="weather">
-  <div class="temp-block">
-    <div class="temp-main">
-      <span class="temp-value">{{ weather.temperature }}</span>
-      <div class="temp-meta">
-        <span class="temp-unit">°C</span>
-        <span class="feels-like">Feels {{ weather.feelsLike }}°</span>
+<div class="hero-panel" *ngIf="weather">
+
+  <!-- TOP: Température principale & météo -->
+  <div class="hero-top">
+    <div class="condition-icon">{{ conditionEmoji }}</div>
+    
+    <div class="temp-block">
+      <span class="temp-value">{{ getTemp(weather.temperature) }}</span>
+      <div class="temp-right">
+        <!-- La sous-unité s'affiche dynamiquement selon la méthode getTemp -->
+        <span class="feels">Feels {{ getTemp(weather.feelsLike) }}</span>
+      </div>
+    </div>
+
+    <div class="condition-info">
+      <h2 class="condition-label">{{ conditionLabel }}</h2>
+      <p class="condition-desc">{{ weather.description | titlecase }}</p>
+      <p class="min-max">
+        <span class="max">↑{{ getTemp(weather.tempMax) }}</span>
+        <span class="sep">/</span>
+        <span class="min">↓{{ getTemp(weather.tempMin) }}</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- MIDDLE: Stats rapides -->
+  <div class="quick-stats">
+    <div class="qs-item">
+      <span class="qs-icon">💧</span>
+      <span class="qs-label">Humidité</span>
+      <span class="qs-val">{{ weather.humidity }}%</span>
+    </div>
+    <div class="qs-item">
+      <span class="qs-icon">💨</span>
+      <span class="qs-label">Vent</span>
+      <span class="qs-val">{{ weather.windSpeed }} km/h</span>
+    </div>
+    <div class="qs-item">
+      <span class="qs-icon">👁️</span>
+      <span class="qs-label">Visibilité</span>
+      <span class="qs-val">{{ weather.visibility }} km</span>
+    </div>
+    <div class="qs-item">
+      <span class="qs-icon">🔽</span>
+      <span class="qs-label">Pression</span>
+      <span class="qs-val">{{ weather.pressure }} hPa</span>
+    </div>
+  </div>
+
+  <!-- BOTTOM: Prévisions heure par heure -->
+  <div class="hourly-section" *ngIf="weather.hourly.length">
+    <div class="hourly-title">Prévisions 24h</div>
+    <div class="hourly-scroll">
+      <div 
+        class="hourly-item" 
+        *ngFor="let h of weather.hourly; let i = index" 
+        [class.now]="i === 0">
+        <span class="h-hour">{{ i === 0 ? 'Maint.' : h.hour }}</span>
+        <!-- Prise en compte de la condition ET du cycle jour/nuit pour l'heure -->
+        <span class="h-icon">{{ getEmoji(h.condition, h.isDay) }}</span>
+        <span class="h-temp">{{ getTemp(h.temp) }}</span>
       </div>
     </div>
   </div>
 
-  <div class="condition-block">
-    <h1 class="condition-text">{{ getConditionLabel() }}</h1>
-    <p class="condition-desc">{{ weather.description | titlecase }}</p>
-  </div>
-
-  <div class="weather-stats">
-    <div class="stat">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M12 2v20M2 12h20"/>
-      </svg>
-      <span class="stat-label">Humidity</span>
-      <span class="stat-val">{{ weather.humidity }}%</span>
-    </div>
-    <div class="stat">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/>
-      </svg>
-      <span class="stat-label">Wind</span>
-      <span class="stat-val">{{ weather.windSpeed }} km/h</span>
-    </div>
-    <div class="stat">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
-      </svg>
-      <span class="stat-label">Visibility</span>
-      <span class="stat-val">{{ weather.visibility }} km</span>
-    </div>
-    <div class="stat">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M12 22V12M12 12C12 12 8 8.5 8 6a4 4 0 0 1 8 0c0 2.5-4 6-4 6z"/>
-      </svg>
-      <span class="stat-label">Pressure</span>
-      <span class="stat-val">{{ weather.pressure }} hPa</span>
-    </div>
-  </div>
 </div>

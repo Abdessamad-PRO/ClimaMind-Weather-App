@@ -1,0 +1,155 @@
+<div class="cards-grid" *ngIf="weather">
+
+      <!-- 1. AIR QUALITY -->
+      <div class="card glass-card">
+        <div class="card-header">
+          <span class="card-icon">🫁</span>
+          <span class="card-title">QUALITÉ DE L'AIR</span>
+          <span class="aq-badge" [ngClass]="aqClass">{{ weather.airQuality?.label || '—' }}</span>
+        </div>
+        <div class="aqi-bar-wrap" *ngIf="weather.airQuality">
+          <div class="aqi-track">
+            <div class="aqi-fill" [style.width.%]="(weather.airQuality.aqi / 5) * 100" [ngClass]="aqClass"></div>
+          </div>
+          <span class="aqi-score">AQI {{ weather.airQuality.aqi }}/5</span>
+        </div>
+        <div class="pollutants" *ngIf="weather.airQuality">
+          <div class="pollutant">
+            <span class="p-label">PM2.5</span>
+            <span class="p-val">{{ weather.airQuality.pm25 | number:'1.1-1' }}</span>
+            <span class="p-unit">μg/m³</span>
+          </div>
+          <div class="pollutant">
+            <span class="p-label">PM10</span>
+            <span class="p-val">{{ weather.airQuality.pm10 | number:'1.1-1' }}</span>
+            <span class="p-unit">μg/m³</span>
+          </div>
+          <div class="pollutant">
+            <span class="p-label">O₃</span>
+            <span class="p-val">{{ weather.airQuality.o3 | number:'1.1-1' }}</span>
+            <span class="p-unit">μg/m³</span>
+          </div>
+          <div class="pollutant">
+            <span class="p-label">NO₂</span>
+            <span class="p-val">{{ weather.airQuality.no2 | number:'1.1-1' }}</span>
+            <span class="p-unit">μg/m³</span>
+          </div>
+        </div>
+        <p class="no-data" *ngIf="!weather.airQuality">Données indisponibles</p>
+      </div>
+
+      <!-- 2. VENT & PRESSION -->
+      <div class="card glass-card">
+        <div class="card-header">
+          <span class="card-icon">💨</span>
+          <span class="card-title">VENT & PRESSION</span>
+        </div>
+        <div class="wind-compass">
+          <div class="compass-ring">
+            <span class="compass-n">N</span>
+            <span class="compass-s">S</span>
+            <span class="compass-e">E</span>
+            <span class="compass-w">O</span>
+            <div class="compass-arrow" [style.transform]="'rotate(' + weather.windDeg + 'deg)'">
+              <div class="arrow-head"></div>
+            </div>
+          </div>
+          <div class="wind-info">
+            <div class="wind-speed">
+              <span class="wi-val">{{ weather.windSpeed }}</span>
+              <span class="wi-unit">km/h</span>
+            </div>
+            <span class="wind-dir">{{ weather.windDirection }}</span>
+          </div>
+        </div>
+        <div class="pressure-row">
+          <span class="pr-label">Pression</span>
+          <span class="pr-val">{{ weather.pressure }} hPa</span>
+        </div>
+        <div class="humidity-row">
+          <span class="pr-label">Humidité</span>
+          <div class="hum-bar">
+            <div class="hum-fill" [style.width.%]="weather.humidity"></div>
+          </div>
+          <span class="pr-val">{{ weather.humidity }}%</span>
+        </div>
+      </div>
+
+      <!-- 3. SOLEIL & UV -->
+      <div class="card glass-card">
+        <div class="card-header">
+          <span class="card-icon">☀️</span>
+          <span class="card-title">SOLEIL & UV</span>
+        </div>
+        <div class="sun-arc-wrap">
+          <!-- Demi-cercle SVG représentant l'arc solaire -->
+          <svg viewBox="0 0 120 64" class="sun-arc-svg">
+            <path d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="3" stroke-linecap="round"/>
+            <path d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#sunGrad)" stroke-width="3" stroke-linecap="round"
+              [attr.stroke-dasharray]="sunDashArray"
+              [attr.stroke-dashoffset]="sunDashOffset"
+            />
+            <defs>
+              <linearGradient id="sunGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#f97316"/>
+                <stop offset="100%" stop-color="#fbbf24"/>
+              </linearGradient>
+            </defs>
+            <circle [attr.cx]="sunDotX" [attr.cy]="sunDotY" r="5" fill="#fbbf24"
+              style="filter: drop-shadow(0 0 4px #fbbf24)"/>
+          </svg>
+          <div class="sun-times">
+            <div class="sun-time-item">
+              <span class="st-icon">🌅</span>
+              <span class="st-label">Lever</span>
+              <span class="st-val">{{ formatTime(weather.sunrise) }}</span>
+            </div>
+            <div class="sun-time-item">
+              <span class="st-icon">🌇</span>
+              <span class="st-label">Coucher</span>
+              <span class="st-val">{{ formatTime(weather.sunset) }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="uv-row">
+          <span class="pr-label">Indice UV</span>
+          <div class="uv-bar">
+            <div class="uv-fill" [style.width.%]="Math.min((weather.uvIndex / 11) * 100, 100)"
+              [style.background]="uvColor"></div>
+          </div>
+          <span class="pr-val">{{ weather.uvIndex }} — {{ uvLabel }}</span>
+        </div>
+        <div class="daylight-row">
+          <span class="pr-label">Durée du jour</span>
+          <span class="pr-val">{{ daylightDuration }}</span>
+        </div>
+      </div>
+
+      <!-- 4. RECHERCHES RÉCENTES -->
+      <div class="card glass-card">
+        <div class="card-header">
+          <span class="card-icon">📜</span>
+          <span class="card-title">RECHERCHES RÉCENTES</span>
+        </div>
+        <div class="recent-list" *ngIf="recentSearches.length > 0; else noRecent">
+          <div
+            class="recent-item"
+            *ngFor="let r of recentSearches.slice(0, 4)"
+            (click)="onSelect.emit(r)"
+          >
+            <div class="ri-left">
+              <span class="ri-dot" [ngClass]="r.condition"></span>
+              <div class="ri-info">
+                <span class="ri-city">{{ r.city }}</span>
+                <span class="ri-country">{{ r.country }}</span>
+              </div>
+            </div>
+            <span class="ri-temp" *ngIf="r.temperature !== undefined">{{ getTemp(r.temperature) }}</span>
+          </div>
+        </div>
+        <ng-template #noRecent>
+          <p class="no-data">Recherchez des villes pour les voir ici.</p>
+        </ng-template>
+      </div>
+
+    </div>

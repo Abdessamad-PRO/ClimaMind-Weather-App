@@ -1,6 +1,6 @@
 import {
   Component, Output, EventEmitter, Input, ViewChild,
-  ElementRef, HostListener
+  ElementRef, HostListener, OnChanges, OnDestroy,SimpleChanges
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -15,56 +15,74 @@ import { debounceTime, distinctUntilChanged, Subject, switchMap, of, catchError 
   templateUrl: './header-actions.component.html',
   styleUrls: ['./header-actions.component.scss']
 })
-export class HeaderActionsComponent {
+export class HeaderActionsComponent implements OnChanges, OnDestroy {
   @Input() city = '';
   @Input() country = '';
-  @Output() onSearch = new EventEmitter<{ lat: number; lon: number; name: string }>();
+  @Input() timezoneOffset: number = 0; // Décalage en secondes depuis l'API OpenWeather
+  @Input() unit: 'C' | 'F' = 'C';
+
+  @Output() onSearch  = new EventEmitter<{ lat: number; lon: number; name: string }>();
   @Output() onRefresh = new EventEmitter<void>();
+  @Output() onUnitChange = new EventEmitter<'C' | 'F'>();
 
   query = '';
   searchOpen = false;
   results: SearchResult[] = [];
-  currentDateTime = '';
-  private search$ = new Subject<string>();
+  currentTime = '';
+  search$ = new Subject<string>();
+  private timerId: any;
 
   constructor(private weatherService: WeatherService) {
-    this.updateTime();
-    setInterval(() => this.updateTime(), 60000);
-
     this.search$.pipe(
-      debounceTime(300),
-      distinctUntilChanged(),
+      debounceTime(300), distinctUntilChanged(),
       switchMap(q => q.length > 2
         ? this.weatherService.searchCities(q).pipe(catchError(() => of([])))
         : of([]))
     ).subscribe(r => this.results = r);
+
+    // Mise à jour de l'horloge toutes les secondes
+    this.timerId = setInterval(() => this.tick(), 1000);
   }
 
-  updateTime() {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['timezoneOffset'] || changes['city']) {
+      this.tick();
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.timerId) clearInterval(this.timerId);
+  }
+
+  // Calcul de l'heure exacte de la ville recherchée selon son Timezone Offset
+  tick() {
     const now = new Date();
-    this.currentDateTime = now.toLocaleDateString('en-US', {
-      weekday: 'long', month: 'long', day: 'numeric'
+    // UTC actuel en millisecondes
+    const utcMs = now.getTime() + (now.getTimezoneOffset() * 60000);
+    // Temps réel de la ville distante en millisecondes
+    const cityMs = utcMs + (this.timezoneOffset * 1000);
+    const cityDate = new Date(cityMs);
+
+    this.currentTime = cityDate.toLocaleTimeString('fr-FR', {
+      hour: '2-digit',
+      minute: '2-digit'
     });
   }
 
-  onQueryChange(q: string) { this.search$.next(q); }
-
-  selectResult(r: SearchResult) {
+  pick(r: SearchResult) {
     this.onSearch.emit({ lat: r.lat, lon: r.lon, name: r.name });
-    this.closeSearch();
+    this.close();
   }
 
-  clearSearch() { this.query = ''; this.results = []; }
-
-  closeSearch() {
-    this.searchOpen = false;
-    this.results = [];
+  setUnit(u: 'C' | 'F') {
+    this.unit = u;
+    this.onUnitChange.emit(u);
   }
+
+  close() { this.searchOpen = false; this.results = []; }
 
   @HostListener('document:click', ['$event'])
   onDocClick(e: Event) {
-    if (!(e.target as HTMLElement).closest('.search-wrapper')) {
-      this.closeSearch();
-    }
+    if (!(e.target as HTMLElement).closest('.search-wrap')) this.close();
   }
 }

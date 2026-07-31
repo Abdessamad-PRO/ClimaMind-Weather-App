@@ -1,26 +1,44 @@
 <div class="bg-wrapper">
-  <!-- Sky gradient layer -->
-  <div class="sky-layer" [ngClass]="condition"></div>
-  <!-- Canvas for particles (rain, snow, sun rays) -->
+  <!-- Gradient de ciel dynamique jour/nuit -->
+  <div class="sky-layer" [ngClass]="skyClass"></div>
+
+  <!-- Canvas : pluie, neige, étoiles, rayons solaires -->
   <canvas #canvas class="particle-canvas"></canvas>
-  <!-- Cloud layer (HTML divs = smoother clouds) -->
-  <div class="cloud-layer" *ngIf="showClouds">
-    <div class="cloud c1" [class.dark]="darkClouds"></div>
-    <div class="cloud c2" [class.dark]="darkClouds"></div>
-    <div class="cloud c3" [class.dark]="darkClouds"></div>
-    <div class="cloud c4" [class.dark]="darkClouds"></div>
-    <div class="cloud c5" [class.dark]="darkClouds"></div>
+
+  <!-- Lune (nuit uniquement) -->
+  <div class="moon-wrapper" *ngIf="!isDay">
+    <div class="moon">
+      <div class="moon-crater c1"></div>
+      <div class="moon-crater c2"></div>
+      <div class="moon-crater c3"></div>
+    </div>
+    <div class="moon-glow"></div>
   </div>
-  <!-- Sun element -->
-  <div class="sun-wrapper" *ngIf="showSun">
+
+  <!-- Soleil (jour clair / partiellement nuageux) -->
+  <div class="sun-wrapper" *ngIf="isDay && showSun">
     <div class="sun">
       <div class="sun-core"></div>
       <div class="sun-glow"></div>
-      <div class="sun-ray" *ngFor="let r of rays" [style.transform]="'rotate(' + r + 'deg)'"></div>
+      <div class="sun-ray" *ngFor="let r of rays"
+        [style.transform]="'rotate(' + r + 'deg)'"
+        [style.animation-delay]="(r / 360 * -12) + 's'">
+      </div>
     </div>
   </div>
-  <!-- Lightning flash overlay -->
+
+  <!-- Nuages CSS -->
+  <div class="cloud-layer" *ngIf="showClouds">
+    <div class="cloud c1" [class.dark]="darkClouds" [class.night]="!isDay"></div>
+    <div class="cloud c2" [class.dark]="darkClouds" [class.night]="!isDay"></div>
+    <div class="cloud c3" [class.dark]="darkClouds" [class.night]="!isDay"></div>
+    <div class="cloud c4" [class.dark]="darkClouds" [class.night]="!isDay"></div>
+    <div class="cloud c5" [class.dark]="darkClouds" [class.night]="!isDay"></div>
+  </div>
+
+  <!-- Flash éclair orage -->
   <div class="lightning-overlay" [class.flash]="lightningFlash"></div>
-  <!-- Dark vignette -->
+
+  <!-- Vignette bords -->
   <div class="vignette"></div>
 </div>

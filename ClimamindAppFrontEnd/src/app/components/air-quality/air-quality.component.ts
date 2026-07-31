@@ -8,7 +8,7 @@ import { AirQuality } from '../../core/models/weather.model';
   imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './air-quality.component.html',
-  styleUrls: ['./air-quality.component.scss']
+  styleUrl: './air-quality.component.scss'
 })
 export class AirQualityComponent {
   @Input() aq?: AirQuality;

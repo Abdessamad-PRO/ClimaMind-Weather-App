@@ -1,17 +1,31 @@
-<div class="forecast-section" *ngIf="weather">
-  <canvas #waveCanvas class="wave-canvas"></canvas>
-  <div class="forecast-days">
-    <div
-      class="day-col"
-      *ngFor="let day of weather.forecast; let i = index"
-      [class.today]="i === 0"
-    >
-      <span class="day-name">{{ i === 0 ? 'Today' : day.dayName }}</span>
-      <div class="day-icon">{{ getIcon(day) }}</div>
-      <div class="day-temps">
-        <span class="temp-max">{{ day.tempMax }}°</span>
-        <span class="temp-min">{{ day.tempMin }}°</span>
+<div class="forecast-band" *ngIf="weather">
+      <div class="forecast-row"
+        *ngFor="let day of weather.forecast; let i = index"
+        [class.today]="i === 0"
+      >
+        <!-- Jour -->
+        <span class="day-name">{{ i === 0 ? "Aujourd'hui" : day.dayName }}</span>
+
+        <!-- Icône + précip -->
+        <div class="icon-cell">
+          <span class="day-icon">{{ getIcon(day) }}</span>
+          <span class="precip" *ngIf="day.precipitation > 0">{{ day.precipitation }}%</span>
+        </div>
+
+        <!-- Temp min -->
+        <span class="t-min">{{ getTemp(day.tempMin) }}</span>
+
+        <!-- Barre de température style Apple -->
+        <div class="bar-track" #barContainer>
+          <div class="bar-fill"
+            [style.left.%]="getBarLeft(day)"
+            [style.width.%]="getBarWidth(day)"
+            [style.background]="getBarGradient(day)"
+          ></div>
+          <div class="bar-dot" [style.left.%]="getCurrentDot(day, i)"></div>
+        </div>
+
+        <!-- Temp max -->
+        <span class="t-max">{{ getTemp(day.tempMax) }}</span>
       </div>
     </div>
-  </div>
-</div>

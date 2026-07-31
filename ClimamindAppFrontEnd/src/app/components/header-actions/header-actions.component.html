@@ -1,58 +1,62 @@
 <header class="header">
-  <div class="location-info" *ngIf="city">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-    </svg>
-    <span class="city-name">{{ city }}, {{ country }}</span>
-    <span class="date-time">{{ currentDateTime }}</span>
-  </div>
-
-  <div class="search-wrapper" [class.open]="searchOpen">
-    <div class="search-box">
-      <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-      </svg>
-      <input
-        #searchInput
-        type="text"
-        placeholder="Search city..."
-        [(ngModel)]="query"
-        (ngModelChange)="onQueryChange($event)"
-        (focus)="searchOpen = true"
-        (keydown.escape)="closeSearch()"
-      />
-      <button class="clear-btn" *ngIf="query" (click)="clearSearch()">✕</button>
-    </div>
-
-    <div class="search-results" *ngIf="searchOpen && results.length > 0">
-      <div
-        class="result-item"
-        *ngFor="let r of results"
-        (click)="selectResult(r)"
-      >
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" opacity="0.5">
-          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+      <!-- Logo -->
+      <div class="logo">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
         </svg>
-        <span class="result-name">{{ r.name }}</span>
-        <span class="result-country">{{ r.state ? r.state + ', ' : '' }}{{ r.country }}</span>
+        <span>ClimaMind</span>
       </div>
-    </div>
-  </div>
 
-  <div class="header-actions">
-    <button class="action-btn" (click)="onRefresh.emit()" title="Refresh">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <polyline points="23 4 23 10 17 10"/>
-        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
-      </svg>
-    </button>
-    <button class="action-btn download-btn">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-        <polyline points="7 10 12 15 17 10"/>
-        <line x1="12" y1="15" x2="12" y2="3"/>
-      </svg>
-      Download App
-    </button>
-  </div>
-</header>
+      <!-- Badge de localisation et Heure Locale Dynamique -->
+      <div class="location-badge" *ngIf="city">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5z"/>
+        </svg>
+        <span class="loc-city">{{ city }}, {{ country }}</span>
+        <span class="loc-time">• {{ currentTime }}</span>
+      </div>
+
+      <div class="spacer"></div>
+
+      <!-- Recherche de ville -->
+      <div class="search-wrap" [class.open]="searchOpen">
+        <div class="search-box">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input
+            type="text"
+            placeholder="Rechercher une ville..."
+            [(ngModel)]="query"
+            (ngModelChange)="search$.next($event)"
+            (focus)="searchOpen = true"
+            (keydown.escape)="close()"
+          />
+          <button class="clear-btn" *ngIf="query" (click)="query=''; results=[]">✕</button>
+        </div>
+        <div class="results-drop" *ngIf="searchOpen && results.length">
+          <div class="result-row" *ngFor="let r of results" (click)="pick(r)">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="rgba(255,255,255,0.4)">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+            </svg>
+            <span class="r-name">{{ r.name }}</span>
+            <span class="r-country">{{ r.state ? r.state + ', ' : '' }}{{ r.country }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Boutons Toggle °C / °F -->
+      <div class="unit-toggle">
+        <button [class.active]="unit === 'C'" (click)="setUnit('C')">°C</button>
+        <button [class.active]="unit === 'F'" (click)="setUnit('F')">°F</button>
+      </div>
+
+      <!-- Actualiser -->
+      <button class="icon-btn" (click)="onRefresh.emit()" title="Actualiser">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="23 4 23 10 17 10"/>
+          <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+        </svg>
+      </button>
+    </header>

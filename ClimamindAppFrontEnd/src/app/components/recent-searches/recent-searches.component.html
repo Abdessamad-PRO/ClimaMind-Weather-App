@@ -1,25 +1,25 @@
-<div class="recent-section glass-card">
-  <div class="section-header">
-    <span class="section-title">Recent Searches</span>
-    <!-- <button class="see-all" *ngIf="searches.length > 0">See all</button> -->
-  </div>
-  <div class="search-list" *ngIf="searches.length > 0; else empty">
-    <div
-      class="search-item"
-      *ngFor="let s of searches.slice(0, 4)"
-      (click)="onSelect.emit(s)"
-    >
-      <div class="search-item-left">
-        <div class="city-dot" [ngClass]="s.condition"></div>
-        <div class="search-item-info">
-          <span class="s-city">{{ s.city }}</span>
-          <span class="s-country">{{ s.country }}</span>
+ <div class="recent-section glass-card">
+      <div class="section-header">
+        <span class="section-title">Recent Searches</span>
+        <!-- <button class="see-all" *ngIf="searches.length > 0">See all</button> -->
+      </div>
+      <div class="search-list" *ngIf="searches.length > 0; else empty">
+        <div
+          class="search-item"
+          *ngFor="let s of searches.slice(0, 4)"
+          (click)="onSelect.emit(s)"
+        >
+          <div class="search-item-left">
+            <div class="city-dot" [ngClass]="s.condition"></div>
+            <div class="search-item-info">
+              <span class="s-city">{{ s.city }}</span>
+              <span class="s-country">{{ s.country }}</span>
+            </div>
+          </div>
+          <span class="s-temp" *ngIf="s.temperature !== undefined">{{ s.temperature }}°</span>
         </div>
       </div>
-      <span class="s-temp" *ngIf="s.temperature !== undefined">{{ s.temperature }}°</span>
+      <ng-template #empty>
+        <p class="empty-text">Search for cities above to see them here.</p>
+      </ng-template>
     </div>
-  </div>
-  <ng-template #empty>
-    <p class="empty-text">Search for cities above to see them here.</p>
-  </ng-template>
-</div>

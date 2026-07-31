@@ -16,8 +16,7 @@ export type MapStyle = 'simple' | 'relief' | 'satellite';
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './world-map.component.html',
   styleUrls: ['./world-map.component.scss']
-})
-export class WorldMapComponent implements AfterViewInit, OnChanges {
+})export class WorldMapComponent implements AfterViewInit, OnChanges {
   @Input() pins: MapPin[] = [];
   @Input() currentLat = 0;
   @Input() currentLon = 0;
@@ -34,19 +33,21 @@ export class WorldMapComponent implements AfterViewInit, OnChanges {
   currentStyle: MapStyle = 'simple';
   private currentTileLayer!: L.TileLayer;
 
-  // Définition des 3 tuiles de fonds de carte
   private tileLayers = {
     simple: L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      minZoom: 2,
       maxZoom: 19,
       attribution: '&copy; OpenStreetMap &copy; CARTO'
     }),
     relief: L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+      minZoom: 2,
       maxZoom: 17,
       attribution: '&copy; OpenStreetMap contributors, SRTM | &copy; OpenTopoMap'
     }),
     satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      minZoom: 2,
       maxZoom: 18,
-      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+      attribution: 'Tiles &copy; Esri'
     })
   };
 
@@ -71,24 +72,28 @@ export class WorldMapComponent implements AfterViewInit, OnChanges {
     const lon = this.currentLon || 0;
     const zoom = this.currentLat ? 6 : 2;
 
-    // 1. Initialisation de la carte Leaflet
+    // 1. Configuration de la carte avec worldCopyJump et minZoom
     this.map = L.map(this.mapElement.nativeElement, {
       center: [lat, lon],
       zoom: zoom,
+      minZoom: 3,           // Bloque le dézoom excessif pour garder une bonne taille
+      worldCopyJump: true, // Recentre les calques automatiquement sur le monde visible
       zoomControl: true
     });
 
-    // 2. Chargement du mode de carte par défaut (Simple)
     this.currentTileLayer = this.tileLayers[this.currentStyle];
     this.currentTileLayer.addTo(this.map);
 
     this.pinsLayerGroup.addTo(this.map);
 
-    // 3. Événement clic
+    // 2. Gestion du clic avec normalisation des coordonnées via .wrap()
     this.map.on('click', (e: L.LeafletMouseEvent) => {
+      // .wrap() transforme par exemple -208.485° en 151.514°
+      const wrappedLatLng = e.latlng.wrap(); 
+
       this.onLocationSelect.emit({
-        lat: e.latlng.lat,
-        lon: e.latlng.lng
+        lat: wrappedLatLng.lat,
+        lon: wrappedLatLng.lng
       });
     });
 
@@ -103,7 +108,6 @@ export class WorldMapComponent implements AfterViewInit, OnChanges {
     }, 100);
   }
 
-  // Changement dynamique du fond de carte
   changeMapStyle(style: MapStyle): void {
     if (this.currentStyle === style || !this.map) return;
 

@@ -5,9 +5,12 @@ export interface WeatherData {
   lon: number;
   temperature: number;
   feelsLike: number;
+  tempMin: number;
+  tempMax: number;
   humidity: number;
   windSpeed: number;
   windDeg: number;
+  windDirection: string;
   visibility: number;
   pressure: number;
   uvIndex: number;
@@ -17,7 +20,10 @@ export interface WeatherData {
   sunrise: number;
   sunset: number;
   timestamp: number;
+  timezone: number;
+  isDay: boolean;          
   forecast: ForecastDay[];
+  hourly: HourlyPoint[];
   airQuality?: AirQuality;
 }
 
@@ -43,6 +49,15 @@ export interface ForecastDay {
   precipitation: number;
 }
 
+export interface HourlyPoint {
+  time: number;
+  hour: string;
+  temp: number;
+  condition: WeatherCondition;
+  icon: string;
+  isDay: boolean;          
+}
+
 export interface AirQuality {
   aqi: number;
   label: string;
@@ -50,11 +65,4 @@ export interface AirQuality {
   pm10: number;
   o3: number;
   no2: number;
-}
-
-export interface HourlyForecast {
-  time: number;
-  temp: number;
-  condition: WeatherCondition;
-  icon: string;
 }

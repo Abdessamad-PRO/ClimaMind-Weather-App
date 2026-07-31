@@ -1,0 +1,166 @@
+.cards-grid {
+      display: grid;
+      /* 4 colonnes sur grand écran, wrap auto si manque de place */
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      padding: 0 16px;
+      flex-shrink: 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* 2×2 entre 600px et 1100px */
+    @media (max-width: 1100px) {
+      .cards-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    /* 1 colonne en dessous de 600px */
+    @media (max-width: 600px) {
+      .cards-grid {
+        grid-template-columns: 1fr;
+        padding: 0 8px;
+      }
+    }
+
+    .card {
+      padding: 14px 16px;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 0;       /* empêche le débordement dans le grid */
+      overflow: hidden;   /* coupe le contenu débordant */
+      box-sizing: border-box;
+    }
+    .glass-card {
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-icon { font-size: 14px; }
+    .card-title {
+      flex: 1;
+      font-size: 10px;
+      color: rgba(255,255,255,0.45);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+    }
+
+    /* ── AQ ── */
+    .aq-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+    .aq-badge.good   { background: rgba(52,211,153,0.2);  color: #34d399; }
+    .aq-badge.fair   { background: rgba(251,191,36,0.2);  color: #fbbf24; }
+    .aq-badge.moderate { background: rgba(251,146,60,0.2); color: #fb923c; }
+    .aq-badge.poor, .aq-badge.very-poor { background: rgba(239,68,68,0.2); color: #ef4444; }
+    .aqi-bar-wrap { display: flex; align-items: center; gap: 8px; }
+    .aqi-track { flex: 1; height: 4px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
+    .aqi-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+    .aqi-fill.good    { background: #34d399; }
+    .aqi-fill.fair    { background: #fbbf24; }
+    .aqi-fill.moderate { background: #fb923c; }
+    .aqi-fill.poor, .aqi-fill.very-poor { background: #ef4444; }
+    .aqi-score { font-size: 10px; color: rgba(255,255,255,0.4); white-space: nowrap; }
+    .pollutants { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 6px; min-width: 0; }
+    .pollutant { display: flex; flex-direction: column; gap: 2px; }
+    .p-label { font-size: 10px; color: rgba(255,255,255,0.4); }
+    .p-val   { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.85); line-height: 1; }
+    .p-unit  { font-size: 9px; color: rgba(255,255,255,0.3); }
+
+    /* ── WIND ── */
+    .wind-compass { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .compass-ring {
+      position: relative;
+      width: 66px; height: 66px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.15);
+      flex-shrink: 0;
+    }
+    .compass-n, .compass-s, .compass-e, .compass-w {
+      position: absolute;
+      font-size: 9px;
+      color: rgba(255,255,255,0.45);
+      font-weight: 600;
+    }
+    .compass-n { top: 2px;  left: 50%; transform: translateX(-50%); }
+    .compass-s { bottom: 2px; left: 50%; transform: translateX(-50%); }
+    .compass-e { right: 4px; top: 50%; transform: translateY(-50%); }
+    .compass-w { left: 4px;  top: 50%; transform: translateY(-50%); }
+    .compass-arrow {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform-origin: bottom center;
+      margin-left: -1px;
+      margin-top: -18px;
+    }
+    .arrow-head {
+      width: 0; height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-bottom: 22px solid #93c5fd;
+    }
+    .wind-info { display: flex; flex-direction: column; gap: 4px; min-width: 0; overflow: hidden; }
+    .wind-speed { display: flex; align-items: baseline; gap: 4px; }
+    .wi-val { font-size: 28px; font-weight: 300; color: #fff; }
+    .wi-unit { font-size: 13px; color: rgba(255,255,255,0.5); }
+    .wind-dir { font-size: 13px; color: rgba(255,255,255,0.55); }
+    .pressure-row, .humidity-row, .daylight-row, .uv-row {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .pr-label { font-size: 11px; color: rgba(255,255,255,0.4); flex-shrink: 0; min-width: 52px; white-space: nowrap; }
+    .pr-val   { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.8); white-space: nowrap; }
+    .hum-bar, .uv-bar {
+      flex: 1; height: 3px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 3px; overflow: hidden;
+    }
+    .hum-fill { height: 100%; background: #60a5fa; border-radius: 3px; }
+    .uv-fill  { height: 100%; border-radius: 3px; }
+
+    /* ── SUN ARC ── */
+    .sun-arc-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .sun-arc-svg { width: 100%; max-width: 140px; }
+    .sun-times { display: flex; justify-content: space-between; width: 100%; }
+    .sun-time-item { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+    .st-icon { font-size: 16px; }
+    .st-label { font-size: 9px; color: rgba(255,255,255,0.4); text-transform: uppercase; }
+    .st-val   { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.85); }
+
+    /* ── RECENT ── */
+    .recent-list { display: flex; flex-direction: column; gap: 2px; }
+    .recent-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 10px; border-radius: 10px;
+      cursor: pointer; transition: background 0.15s;
+    }
+    .recent-item:hover { background: rgba(255,255,255,0.07); }
+    .ri-left { display: flex; align-items: center; gap: 10px; }
+    .ri-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(147,197,253,0.6); flex-shrink: 0;
+    }
+    .ri-dot.clear, .ri-dot.partly-cloudy { background: #fbbf24; }
+    .ri-dot.rain, .ri-dot.drizzle        { background: #60a5fa; }
+    .ri-dot.thunderstorm, .ri-dot.stormy  { background: #a78bfa; }
+    .ri-dot.snow { background: #e2e8f0; }
+    .ri-dot.night-clear   { background: #c4b5fd; }
+    .ri-dot.night-cloudy  { background: #64748b; }
+    .ri-info { display: flex; flex-direction: column; gap: 1px; }
+    .ri-city    { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.85); }
+    .ri-country { font-size: 11px; color: rgba(255,255,255,0.4); }
+    .ri-temp    { font-size: 15px; font-weight: 300; color: rgba(255,255,255,0.7); }
+
+    .no-data { font-size: 12px; color: rgba(255,255,255,0.3); text-align: center; padding: 8px 0; margin: 0; }
+ 

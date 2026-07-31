@@ -9,36 +9,32 @@ import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { HeaderActionsComponent } from '../../components/header-actions/header-actions.component';
 import { CurrentWeatherComponent } from '../../components/current-weather/current-weather.component';
 import { ForecastWaveComponent } from '../../components/forecast-wave/forecast-wave.component';
-import { catchError, of } from 'rxjs';
+import { IndicatorCardsComponent } from '../../components/indicator-cards/indicator-cards.component';
 import { WorldMapComponent } from '../../components/world-map/world-map.component';
-
+import { catchError, of } from 'rxjs';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
-    CommonModule,
+   CommonModule,
     BackgroundAnimComponent,
-    SidebarComponent,
     HeaderActionsComponent,
     CurrentWeatherComponent,
     ForecastWaveComponent,
+    IndicatorCardsComponent,
     WorldMapComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  selectedUnit: 'C' | 'F' = 'C';
   weather?: WeatherData;
   loading = false;
   mapLoading = false;
   error = '';
   recentSearches: RecentSearch[] = [];
   mapPins: MapPin[] = [];
-  featuredCities: MapPin[] = [
-    { lat: 51.5074, lon: -0.1278, city: 'London', condition: 'partly-cloudy' },
-    { lat: 48.8566, lon: 2.3522, city: 'Paris', condition: 'clear' },
-    { lat: 40.7128, lon: -74.006, city: 'New York', condition: 'cloudy' }
-  ];
 
   constructor(
     private weatherService: WeatherService,
@@ -56,7 +52,7 @@ export class DashboardComponent implements OnInit {
     this.error = '';
     this.locationService.getCurrentPosition().pipe(
       catchError(() => {
-        this.error = 'Location access denied.';
+        this.error = 'Accès à la géolocalisation refusé.';
         this.loading = false;
         this.cdr.detectChanges();
         return of(null);
@@ -64,6 +60,8 @@ export class DashboardComponent implements OnInit {
     ).subscribe(pos => {
       if (pos) {
         this.loadByCoords(pos.coords.latitude, pos.coords.longitude);
+      } else {
+        this.loadDefault();
       }
     });
   }
@@ -75,8 +73,8 @@ export class DashboardComponent implements OnInit {
   loadByCoords(lat: number, lon: number, addPin = true) {
     this.mapLoading = true;
     this.weatherService.getWeatherByCoords(lat, lon).pipe(
-      catchError(err => {
-        this.error = 'Could not fetch weather. Check your API key.';
+      catchError(() => {
+        this.error = 'Impossible de charger les données météo.';
         this.mapLoading = false;
         this.loading = false;
         this.cdr.detectChanges();
@@ -87,9 +85,13 @@ export class DashboardComponent implements OnInit {
         this.weather = data;
         this.loading = false;
         this.mapLoading = false;
+        this.error = '';
+
         if (addPin) {
           const pin: MapPin = {
-            lat, lon, city: data.city,
+            lat,
+            lon,
+            city: data.city,
             temperature: data.temperature,
             condition: data.condition
           };
@@ -144,4 +146,9 @@ export class DashboardComponent implements OnInit {
       if (saved) this.recentSearches = JSON.parse(saved);
     } catch {}
   }
+
+  changeUnit(unit: 'C' | 'F') {
+    this.selectedUnit = unit;
+}
+
 }
