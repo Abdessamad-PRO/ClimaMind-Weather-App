@@ -19,9 +19,6 @@ A modern, elegant, and fully responsive weather dashboard built with Angular, pr
 Watch ClimaMind in action.
 
 
-**Demo Video**
-
-
 
 ---
 
@@ -63,9 +60,9 @@ Features include:
 
 Available layers:
 
--  OpenStreetMap
--  Topographic
--  Satellite
+- OpenStreetMap
+- Topographic
+- Satellite
 
 ---
 
@@ -118,7 +115,7 @@ Using:
 
 ---
 
-#  Technologies
+# 🛠️ Technologies
 
 ## Frontend
 
@@ -152,7 +149,7 @@ Install the following before running the project.
 
 ---
 
-# 📥 Installation
+#  Installation
 
 Clone the repository
 
@@ -178,7 +175,7 @@ npm install
 
 Update:
 
-```
+```text
 src/environments/environment.ts
 ```
 
@@ -191,7 +188,7 @@ export const environment = {
 
 Replace
 
-```
+```text
 YOUR_OPENWEATHER_API_KEY
 ```
 
@@ -207,15 +204,13 @@ ng serve
 
 Open
 
-```
+```text
 http://localhost:4200
 ```
 
 ---
 
 #  Project Structure
-
-```# 📂 Project Structure
 
 ```text
 src/
@@ -298,7 +293,6 @@ src/
 ├── main.ts
 └── styles.scss
 ```
-```
 
 ---
 
@@ -359,7 +353,6 @@ Upcoming features:
 - [ ] Weather History
 - [ ] Charts & Statistics
 
-
 ---
 
 #  Future Improvements
@@ -374,10 +367,9 @@ Upcoming features:
 
 ---
 
-
 #  Author
 
-**AIT EL MAHJOUB ABDESSAMAD **
+**AIT EL MAHJOUB ABDESSAMAD**
 
 Master's Student in Distributed Systems & Artificial Intelligence
 
@@ -395,6 +387,4 @@ https://github.com/Abdessamad-PRO
 
 LinkedIn:
 
-[https://linkedin.com/in/your-profile](https://www.linkedin.com/feed/)
-
----
+https://www.linkedin.com/feed/
