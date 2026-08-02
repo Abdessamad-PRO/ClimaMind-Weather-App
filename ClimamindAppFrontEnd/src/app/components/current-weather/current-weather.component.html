@@ -8,10 +8,10 @@
       <span class="temp-value">{{ getTemp(weather.temperature) }}</span>
       <div class="temp-right">
         <!-- La sous-unité s'affiche dynamiquement selon la méthode getTemp -->
-        <span class="feels">Feels {{ getTemp(weather.feelsLike) }}</span>
+        <span class="feels">Feels Like {{ getTemp(weather.feelsLike) }}</span>
       </div>
     </div>
-
+ 
     <div class="condition-info">
       <h2 class="condition-label">{{ conditionLabel }}</h2>
       <p class="condition-desc">{{ weather.description | titlecase }}</p>

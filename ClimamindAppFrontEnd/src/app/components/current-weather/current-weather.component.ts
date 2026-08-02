@@ -52,7 +52,7 @@ export class CurrentWeatherComponent {
     };
 
     const nightMap: Record<string, string> = {
-      'clear': '🌙', 'partly-cloudy': '🌛', 'cloudy': '☁️',
+      'clear': '🌙', 'partly-cloudy': '🌙', 'cloudy': '☁️',
       'rain': '🌧️', 'drizzle': '🌦️', 'thunderstorm': '⛈️',
       'stormy': '🌩️', 'snow': '🌨️', 'mist': '🌫️'
     };
