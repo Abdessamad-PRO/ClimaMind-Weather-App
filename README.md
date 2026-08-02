@@ -20,6 +20,10 @@ Watch ClimaMind in action.
 
 
 
+https://github.com/user-attachments/assets/9327c29d-17b5-44df-893b-182dac8e3587
+
+
+
 ---
 
 #  Features
